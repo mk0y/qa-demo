@@ -69,7 +69,7 @@ const FileList = () => {
                     </div>
                   </div>
                   <p className="my-2 text-sm leading-none text-left text-slate-500">
-                    {R.take(200, R.path([docKey, 'pages', 0, 'content'], docs))}
+                    {`${R.take(200, R.path([docKey, 'pages', 0, 'content'], docs))}...`}
                   </p>
                   <p className="mt-1 text-sm leading-none text-left text-slate-500">
                     {R.path([docKey, 'pages', 0, 'place'], docs)}
