@@ -1,11 +1,21 @@
+import { store } from '@/store/store.ts'
+import { ClerkProvider } from '@clerk/clerk-react'
+import { Provider } from 'react-redux'
+import { useNavigate, Outlet } from 'react-router-dom'
 import './App.css'
-import MainView from './components/scrollable-view'
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 function App() {
+  const navigate = useNavigate()
   return (
-    <div>
-      <MainView />
-    </div>
+    <ClerkProvider navigate={navigate} publishableKey={PUBLISHABLE_KEY}>
+      <Provider store={store}>
+        <div>
+          <Outlet />
+        </div>
+      </Provider>
+    </ClerkProvider>
   )
 }
 
