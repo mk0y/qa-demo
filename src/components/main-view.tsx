@@ -8,14 +8,9 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { useUploadDocsMutation } from '@/store/api'
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
-} from '@clerk/clerk-react'
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
 import { SVGProps, useRef } from 'react'
-import { Outlet, Link } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { JSX } from 'react/jsx-runtime'
 import SidebarNav from './ui/sidebar-nav'
 
