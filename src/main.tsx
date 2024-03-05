@@ -26,10 +26,10 @@ const router = createBrowserRouter([
           {
             path: '/query',
             element: <QueryPage />
-          }
+          },
+          { path: '/sign-in', element: <SignInPage /> }
         ]
-      },
-      { path: '/sign-in', element: <SignInPage /> }
+      }
     ]
   }
 ])
