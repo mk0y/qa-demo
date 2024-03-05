@@ -36,8 +36,12 @@ const SidebarNav = () => {
         Query
       </Link>
       <Link
-        to="/"
-        className={twMerge(sidebarItemClass, sidebarItemDefaultClass)}
+        to="/settings"
+        className={twMerge(
+          sidebarItemClass,
+          sidebarItemDefaultClass,
+          location.pathname == '/settings' && sidebarItemActiveClass
+        )}
       >
         <SettingsIcon className="size-4" />
         Settings

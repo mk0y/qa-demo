@@ -36,11 +36,29 @@ export const docsApi = createApi({
           headers: { 'Content-Type': 'application/json' }
         }
       }
+    }),
+    createPcIndex: builder.mutation<{ done: string }, { pcName: string }>({
+      query: (body: { pcName: string }) => {
+        return {
+          url: '/pine',
+          method: 'POST',
+          body,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      }
+    }),
+    getPcStatus: builder.query<{ state: string }, { pc: string }>({
+      query: ({ pc }) => `pine?pc=${pc}`
     })
   })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetDocsQuery, useUploadDocsMutation, useAskQMutation } =
-  docsApi
+export const {
+  useGetDocsQuery,
+  useUploadDocsMutation,
+  useAskQMutation,
+  useCreatePcIndexMutation,
+  useLazyGetPcStatusQuery
+} = docsApi
