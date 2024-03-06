@@ -8,13 +8,19 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { useUploadDocsMutation } from '@/store/api'
-import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/clerk-react'
+import * as R from 'ramda'
 import { SVGProps, useRef } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { JSX } from 'react/jsx-runtime'
 import SidebarNav from './ui/sidebar-nav'
 
 const MainView = () => {
+  const { user } = useUser()
+  const orgSlug = R.path(
+    ['organizationMemberships', 0, 'organization', 'slug'],
+    user
+  ) as string
   const uploadRef = useRef<HTMLInputElement>(null)
   const [submitUpload] = useUploadDocsMutation({ fixedCacheKey: 'uploaddocs' })
   return (
@@ -66,7 +72,7 @@ const MainView = () => {
                     const files: FileList | never[] =
                       e.currentTarget.files || []
                     const formData = new FormData()
-                    formData.append('container', 'compx')
+                    formData.append('container', orgSlug)
                     console.log('change')
                     for (let file of files) {
                       formData.append('docs', file)

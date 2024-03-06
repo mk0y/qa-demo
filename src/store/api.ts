@@ -27,8 +27,11 @@ export const docsApi = createApi({
         }
       }
     }),
-    askQ: builder.mutation<{ done: string }, { question: string }>({
-      query: (body: { question: string }) => {
+    askQ: builder.mutation<
+      { done: string },
+      { question: string; container: string }
+    >({
+      query: (body: { question: string; container: string }) => {
         return {
           url: '/ask',
           method: 'POST',

@@ -1,11 +1,17 @@
 import { Button } from '@/components/ui/button'
 import { useAskQMutation } from '@/store/api'
+import { useUser } from '@clerk/clerk-react'
 import * as R from 'ramda'
 import { SVGProps, useEffect, useState } from 'react'
 import { JSX } from 'react/jsx-runtime'
 import ChatTextarea from './ui/chat-textarea'
 
 export function ChatView() {
+  const { user } = useUser()
+  const orgSlug = R.path(
+    ['organizationMemberships', 0, 'organization', 'slug'],
+    user
+  ) as string
   const [ask, { data: answer }] = useAskQMutation()
   const [messages, setMessages] = useState<string[]>([])
   console.log({ answer })
@@ -77,7 +83,7 @@ export function ChatView() {
               }}
               onPress={(val: string) => {
                 setMessages(R.append(val, messages))
-                ask({ question: val })
+                ask({ question: val, container: orgSlug })
               }}
             />
           </div>
