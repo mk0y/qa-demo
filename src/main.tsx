@@ -5,9 +5,9 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App.tsx'
 import MainView from './components/main-view'
+import SettingsPage from './routes/settings-page.tsx'
 import './index.css'
 import DocsList from './routes/file-list.tsx'
-import SettingsPage from './routes/settings-page.tsx'
 import SignInPage from './routes/sign-in.tsx'
 
 const router = createBrowserRouter([
