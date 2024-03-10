@@ -10,7 +10,6 @@ type Docs = {
   }
 }
 
-// Define a service using a base URL and expected endpoints
 export const docsApi = createApi({
   reducerPath: 'docsApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}` }),

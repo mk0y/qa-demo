@@ -5,10 +5,12 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App.tsx'
 import MainView from './components/main-view'
-import SettingsPage from './routes/settings-page.tsx'
 import './index.css'
 import DocsList from './routes/file-list.tsx'
+import Integrations from './routes/integrations-view.tsx'
+import SettingsPage from './routes/settings-page.tsx'
 import SignInPage from './routes/sign-in.tsx'
+import WriteNewDoc from './routes/write-new.tsx'
 
 const router = createBrowserRouter([
   {
@@ -29,8 +31,16 @@ const router = createBrowserRouter([
             element: <QueryPage />
           },
           {
+            path: '/new',
+            element: <WriteNewDoc />
+          },
+          {
             path: '/settings',
             element: <SettingsPage />
+          },
+          {
+            path: '/integrations',
+            element: <Integrations />
           },
           { path: '/sign-in', element: <SignInPage /> }
         ]

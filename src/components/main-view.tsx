@@ -30,7 +30,7 @@ const MainView = () => {
           <div className="flex h-[60px] items-center border-b px-6">
             <a className="flex items-center gap-2 font-semibold" href="#">
               <Package2Icon className="size-6" />
-              <span className="">IntelDoc</span>
+              <span className="">DocYard</span>
             </a>
             <Button
               className="ml-auto size-8 rounded-md"

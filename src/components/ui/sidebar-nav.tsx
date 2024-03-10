@@ -1,5 +1,11 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import { SVGProps } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
 
 const sidebarItemClass =
@@ -11,6 +17,7 @@ const sidebarItemActiveClass =
 
 const SidebarNav = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   return (
     <nav className="grid items-start px-4 text-sm font-medium">
       <Link
@@ -22,7 +29,38 @@ const SidebarNav = () => {
         )}
       >
         <HomeIcon className="size-4" />
-        Docs
+        <span className="flex items-center flex-1 justify-between">
+          Docs
+          <TooltipProvider delayDuration={250}>
+            <Tooltip>
+              <TooltipTrigger>
+                <span
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    navigate('/new')
+                  }}
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 15 15"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7.49991 0.876892C3.84222 0.876892 0.877075 3.84204 0.877075 7.49972C0.877075 11.1574 3.84222 14.1226 7.49991 14.1226C11.1576 14.1226 14.1227 11.1574 14.1227 7.49972C14.1227 3.84204 11.1576 0.876892 7.49991 0.876892ZM1.82707 7.49972C1.82707 4.36671 4.36689 1.82689 7.49991 1.82689C10.6329 1.82689 13.1727 4.36671 13.1727 7.49972C13.1727 10.6327 10.6329 13.1726 7.49991 13.1726C4.36689 13.1726 1.82707 10.6327 1.82707 7.49972ZM7.50003 4C7.77617 4 8.00003 4.22386 8.00003 4.5V7H10.5C10.7762 7 11 7.22386 11 7.5C11 7.77614 10.7762 8 10.5 8H8.00003V10.5C8.00003 10.7761 7.77617 11 7.50003 11C7.22389 11 7.00003 10.7761 7.00003 10.5V8H4.50003C4.22389 8 4.00003 7.77614 4.00003 7.5C4.00003 7.22386 4.22389 7 4.50003 7H7.00003V4.5C7.00003 4.22386 7.22389 4 7.50003 4Z"
+                      fill="currentColor"
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>Write new doc</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </span>
       </Link>
       <Link
         to={`/query`}
@@ -46,6 +84,17 @@ const SidebarNav = () => {
         <SettingsIcon className="size-4" />
         Settings
       </Link>
+      <Link
+        to="/integrations"
+        className={twMerge(
+          sidebarItemClass,
+          sidebarItemDefaultClass,
+          location.pathname == '/integrations' && sidebarItemActiveClass
+        )}
+      >
+        <IntegrationsIcon className="size-4" />
+        Integrations
+      </Link>
       {/* <Link
         to="/"
         className={twMerge(sidebarItemClass, sidebarItemDefaultClass)}
@@ -54,6 +103,28 @@ const SidebarNav = () => {
         Analytics
       </Link> */}
     </nav>
+  )
+}
+
+function IntegrationsIcon(
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) {
+  return (
+    <svg
+      {...props}
+      width="15"
+      height="15"
+      viewBox="0 0 15 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9.94969 7.49989C9.94969 8.85288 8.85288 9.94969 7.49989 9.94969C6.14691 9.94969 5.0501 8.85288 5.0501 7.49989C5.0501 6.14691 6.14691 5.0501 7.49989 5.0501C8.85288 5.0501 9.94969 6.14691 9.94969 7.49989ZM10.8632 8C10.6213 9.64055 9.20764 10.8997 7.49989 10.8997C5.79214 10.8997 4.37847 9.64055 4.13662 8H0.5C0.223858 8 0 7.77614 0 7.5C0 7.22386 0.223858 7 0.5 7H4.13659C4.37835 5.35935 5.79206 4.1001 7.49989 4.1001C9.20772 4.1001 10.6214 5.35935 10.8632 7H14.5C14.7761 7 15 7.22386 15 7.5C15 7.77614 14.7761 8 14.5 8H10.8632Z"
+        fill="currentColor"
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+      ></path>
+    </svg>
   )
 }
 
