@@ -7,6 +7,11 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
 import { useUploadDocsMutation } from '@/store/api'
 import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/clerk-react'
 import * as R from 'ramda'
@@ -51,17 +56,42 @@ const MainView = () => {
                 <CardDescription>Upload docs of any type.</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button
-                  className="w-full"
-                  size="sm"
-                  onClick={() => {
-                    if (uploadRef.current) {
-                      uploadRef.current.click()
-                    }
-                  }}
-                >
-                  Upload
-                </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button className="w-full" size="sm" onClick={() => {}}>
+                      Upload
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="w-80">
+                    <div className="m-2">
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          if (uploadRef.current) {
+                            uploadRef.current.click()
+                          }
+                        }}
+                      >
+                        Agreement / Contract
+                      </Button>
+                    </div>
+                    <div className="m-2">
+                      <Button variant="ghost">ID Document</Button>
+                    </div>
+                    <div className="m-2">
+                      <Button variant="ghost">Utility / Bill</Button>
+                    </div>
+                    <div className="m-2">
+                      <Button variant="ghost">Payslip</Button>
+                    </div>
+                    <div className="m-2">
+                      <Button variant="ghost">CV / Resume</Button>
+                    </div>
+                    <div className="m-2">
+                      <Button variant="ghost">Other / Free Form</Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
                 <input
                   type="file"
                   name="uploaddoc"

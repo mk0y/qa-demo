@@ -10,6 +10,7 @@ import DocsList from './routes/file-list.tsx'
 import Integrations from './routes/integrations-view.tsx'
 import SettingsPage from './routes/settings-page.tsx'
 import SignInPage from './routes/sign-in.tsx'
+import Suggestions from './routes/suggestions-router-page.tsx'
 import Users from './routes/users-route-page.tsx'
 import Widgets from './routes/widgets-route-page.tsx'
 import WriteNewDoc from './routes/write-new.tsx'
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
           {
             path: '/users',
             element: <Users />
+          },
+          {
+            path: '/suggestions',
+            element: <Suggestions />
           },
           { path: '/sign-in', element: <SignInPage /> }
         ]
