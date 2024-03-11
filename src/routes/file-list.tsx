@@ -81,7 +81,9 @@ const FileList = () => {
             </li>
           </ul>
         </div>
-      ) : null}
+      ) : (
+        <LoadingItem />
+      )}
     </div>
   )
 }

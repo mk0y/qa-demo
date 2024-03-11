@@ -77,7 +77,7 @@ export function ChatView() {
             <ChatTextarea
               className="w-full min-h-0"
               id="message"
-              placeholder="Type your message"
+              placeholder="Ask me anything based on your docs"
               style={{
                 resize: 'none'
               }}

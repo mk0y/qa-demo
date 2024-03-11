@@ -10,6 +10,8 @@ import DocsList from './routes/file-list.tsx'
 import Integrations from './routes/integrations-view.tsx'
 import SettingsPage from './routes/settings-page.tsx'
 import SignInPage from './routes/sign-in.tsx'
+import Users from './routes/users-route-page.tsx'
+import Widgets from './routes/widgets-route-page.tsx'
 import WriteNewDoc from './routes/write-new.tsx'
 
 const router = createBrowserRouter([
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
           {
             path: '/integrations',
             element: <Integrations />
+          },
+          {
+            path: '/widgets',
+            element: <Widgets />
+          },
+          {
+            path: '/users',
+            element: <Users />
           },
           { path: '/sign-in', element: <SignInPage /> }
         ]
