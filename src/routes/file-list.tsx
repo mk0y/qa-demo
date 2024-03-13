@@ -1,11 +1,26 @@
+import DirListItem from '@/components/file-list/dir-list-item'
+import DirNameBack from '@/components/file-list/dir-name-back'
+import NewDir from '@/components/file-list/new-dir'
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { useGetDocsQuery, useUploadDocsMutation } from '@/store/api'
+import { fetchDirs } from '@/store/docsReducer'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { RootState } from '@/store/store'
 import { useUser } from '@clerk/clerk-react'
+import { Redo, Undo } from 'lucide-react'
 import * as R from 'ramda'
 import { SVGProps, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import nodocs from '/src/assets/nodocstr.webp'
 
-const FileList = () => {
+const FileList = ({ isDir }: { isDir?: boolean }) => {
   const { user } = useUser()
+  const params = useParams() as { dir: string }
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(fetchDirs(params.dir))
+  }, [params.dir])
   const orgSlug = R.path(
     ['organizationMemberships', 0, 'organization', 'slug'],
     user
@@ -16,7 +31,7 @@ const FileList = () => {
     isLoading,
     isFetching
   } = useGetDocsQuery(
-    { container: orgSlug },
+    { container: orgSlug, dir: params['dir'] },
     {
       skip: !!!orgSlug,
       // refetchOnFocus: true,
@@ -31,35 +46,72 @@ const FileList = () => {
       refetch()
     }
   }, [isSubmitSuccess])
+  const dirs = useAppSelector((state: RootState) => state.docsReducer.dirs)
   return (
-    <div className="grid items-start gap-4">
-      {submitLoading && <LoadingItem />}
-      {!R.isEmpty(docs) ? (
-        R.keys(docs).map((docKey, i) => {
-          return (
-            <div className="grid gap-2" key={i}>
-              <div className="rounded-lg border p-4">
-                <div className="flex justify-between">
-                  <h2 className="font-semibold text-left">
-                    {R.path([docKey, 'blobname'], docs)}
-                  </h2>
-                  <div>
-                    {new Date(
-                      R.path([docKey, 'lastModified'], docs)
-                    ).toDateString()}
-                  </div>
-                </div>
-                <p className="my-2 text-sm leading-none text-left text-slate-500">
-                  {`${R.take(200, R.path([docKey, 'pages', 0, 'content'], docs))}...`}
-                </p>
-                <p className="mt-1 text-sm leading-none text-left text-slate-500">
-                  {R.path([docKey, 'pages', 0, 'place'], docs)}
-                </p>
-              </div>
+    <div className="file-list-wrap h-full">
+      <div className="flex mb-5 justify-between">
+        <div className="flex items-end">
+          {isDir && (
+            <div>
+              <DirNameBack />
             </div>
-          )
-        })
-      ) : !isLoading && !isFetching && !submitLoading ? (
+          )}
+          <div className={isDir ? 'ml-8' : ''}>
+            <NewDir />
+          </div>
+        </div>
+        <div className="flex">
+          <Button variant="ghost" size="sm" title="Undo" disabled>
+            <Undo size={20} strokeWidth={1.2} />
+            <span className="inline-block ml-1">Undo</span>
+          </Button>
+          <Button variant="ghost" size="sm" title="Redo" disabled>
+            <span className="inline-block mr-1">Redo</span>
+            <Redo size={20} strokeWidth={1.2} />
+          </Button>
+        </div>
+      </div>
+      {submitLoading && <LoadingItem />}
+      {!R.isEmpty(dirs) ? (
+        <div>
+          {R.keys(dirs).map((dirSlug, i) => {
+            return (
+              <DirListItem key={i} dirName={dirs[dirSlug]} dirSlug={dirSlug} />
+            )
+          })}
+        </div>
+      ) : null}
+      {!R.isEmpty(docs) ? (
+        <div>
+          <ScrollArea className="h-[720px]">
+            {R.keys(docs).map((docKey, i) => {
+              return (
+                <div
+                  className="shadow-md border rounded-md p-4 first:mt-0 mt-4"
+                  key={i}
+                >
+                  <div className="flex justify-between">
+                    <h2 className="font-semibold text-left">
+                      {R.path([docKey, 'blobname'], docs)}
+                    </h2>
+                    <div>
+                      {new Date(
+                        R.path([docKey, 'lastModified'], docs)
+                      ).toDateString()}
+                    </div>
+                  </div>
+                  <p className="my-2 text-sm leading-none text-left text-slate-500">
+                    {`${R.take(200, R.path([docKey, 'pages', 0, 'content'], docs))}...`}
+                  </p>
+                  <p className="mt-1 text-sm leading-none text-left text-slate-500">
+                    {R.path([docKey, 'pages', 0, 'place'], docs)}
+                  </p>
+                </div>
+              )
+            })}
+          </ScrollArea>
+        </div>
+      ) : !isLoading && !isFetching && !submitLoading && !isDir ? (
         <div className="flex items-center justify-center flex-col">
           <EmptyDocuments />
           <p>No documents yet.</p>
@@ -82,7 +134,7 @@ const FileList = () => {
           </ul>
         </div>
       ) : (
-        <LoadingItem />
+        !isDir && <LoadingItem />
       )}
     </div>
   )
@@ -134,7 +186,7 @@ const EmptyDocuments = () => <img src={nodocs} alt="no docs" className="w-64" />
 
 const LoadingItem = () => {
   return (
-    <div className="grid gap-2" key={124}>
+    <div className="grid gap-2" key={123}>
       <div className="shadow rounded-md p-4 w-full">
         <div className="animate-pulse flex space-x-4">
           <div className="flex-1 space-y-6 py-1">

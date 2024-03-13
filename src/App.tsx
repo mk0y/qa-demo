@@ -16,7 +16,7 @@ function App() {
   return (
     <ClerkProvider navigate={navigate} publishableKey={PUBLISHABLE_KEY}>
       <Provider store={store}>
-        <div>
+        <div className="flex flex-1">
           <SignedOut>
             <div className="flex items-center justify-center h-screen">
               <RedirectToSignIn />

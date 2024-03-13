@@ -1,4 +1,6 @@
 import { AspectRatio } from '@/components/ui/aspect-ratio'
+import gdocs from '../assets/google-docs.png'
+import gdrive from '../assets/google-drive-logo.png'
 
 const Integrations = () => {
   return (
@@ -18,6 +20,22 @@ const Integrations = () => {
       <div className="text-3xl mb-4">Import</div>
       <div className="ign-row flex">
         <div className="w-[240px] shadow-md hover:shadow-xl transition-shadow cursor-pointer first:ml-0">
+          <AspectRatio
+            ratio={16 / 9}
+            className="flex justify-center items-center p-6"
+          >
+            <img src={gdocs} alt="google docs" />
+          </AspectRatio>
+        </div>
+        <div className="w-[240px] shadow-md hover:shadow-xl transition-shadow cursor-pointer first:ml-0 ml-5">
+          <AspectRatio
+            ratio={16 / 9}
+            className="flex justify-center items-center p-6"
+          >
+            <img src={gdrive} alt="google drive" />
+          </AspectRatio>
+        </div>
+        <div className="w-[240px] shadow-md hover:shadow-xl transition-shadow cursor-pointer first:ml-0 ml-5">
           <AspectRatio
             ratio={16 / 9}
             className="flex justify-center items-center"

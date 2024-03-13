@@ -30,6 +30,10 @@ const router = createBrowserRouter([
             element: <DocsList />
           },
           {
+            path: '/docs/:dir',
+            element: <DocsList isDir />
+          },
+          {
             path: '/query',
             element: <QueryPage />
           },

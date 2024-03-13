@@ -1,35 +1,15 @@
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
-import { useUploadDocsMutation } from '@/store/api'
-import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/clerk-react'
-import * as R from 'ramda'
-import { SVGProps, useRef } from 'react'
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
+import { SVGProps } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { JSX } from 'react/jsx-runtime'
 import SidebarNav from './ui/sidebar-nav'
+import UploadWidget from './upload-widget'
 
 const MainView = () => {
-  const { user } = useUser()
-  const orgSlug = R.path(
-    ['organizationMemberships', 0, 'organization', 'slug'],
-    user
-  ) as string
-  const uploadRef = useRef<HTMLInputElement>(null)
-  const [submitUpload] = useUploadDocsMutation({ fixedCacheKey: 'uploaddocs' })
   return (
-    <div className="grid min-h-screen items-start gap-4 pb-0 lg:grid-cols-[280px_1fr]">
+    <div className="grid min-h-screen items-start gap-0 pb-0 lg:grid-cols-[280px_1fr] w-full">
       <div className="hidden border-r bg-gray-100/40 dark:bg-gray-800/40 lg:block h-full">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-[60px] items-center border-b px-6">
@@ -50,68 +30,7 @@ const MainView = () => {
             <SidebarNav />
           </div>
           <div className="mt-auto p-4">
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle>Upload</CardTitle>
-                <CardDescription>Upload docs of any type.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button className="w-full" size="sm" onClick={() => {}}>
-                      Upload
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="start" className="w-80">
-                    <div className="m-2">
-                      <Button
-                        variant="ghost"
-                        onClick={() => {
-                          if (uploadRef.current) {
-                            uploadRef.current.click()
-                          }
-                        }}
-                      >
-                        Agreement / Contract
-                      </Button>
-                    </div>
-                    <div className="m-2">
-                      <Button variant="ghost">ID Document</Button>
-                    </div>
-                    <div className="m-2">
-                      <Button variant="ghost">Utility / Bill</Button>
-                    </div>
-                    <div className="m-2">
-                      <Button variant="ghost">Payslip</Button>
-                    </div>
-                    <div className="m-2">
-                      <Button variant="ghost">CV / Resume</Button>
-                    </div>
-                    <div className="m-2">
-                      <Button variant="ghost">Other / Free Form</Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-                <input
-                  type="file"
-                  name="uploaddoc"
-                  ref={uploadRef}
-                  className="hidden"
-                  multiple={true}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    const files: FileList | never[] =
-                      e.currentTarget.files || []
-                    const formData = new FormData()
-                    formData.append('container', orgSlug)
-                    console.log('change')
-                    for (let file of files) {
-                      formData.append('docs', file)
-                    }
-                    submitUpload(formData)
-                  }}
-                />
-              </CardContent>
-            </Card>
+            <UploadWidget />
           </div>
         </div>
       </div>
@@ -142,7 +61,7 @@ const MainView = () => {
             </SignedIn>
           </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6 max-w-5xl">
           <Outlet />
         </main>
       </div>

@@ -14,8 +14,13 @@ export const docsApi = createApi({
   reducerPath: 'docsApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}` }),
   endpoints: (builder) => ({
-    getDocs: builder.query<Docs, { container: string }>({
-      query: ({ container }) => `get-docs?container=${container}`
+    getDocs: builder.query<Docs, { container: string, dir: string }>({
+      query: ({ container, dir }) => {
+        const params = new URLSearchParams()
+        params.append("container", container)
+        if (dir) params.append('dir', dir)
+        return `get-docs?${params.toString()}`
+      }
     }),
     uploadDocs: builder.mutation<void, FormData>({
       query: (body: FormData) => {
