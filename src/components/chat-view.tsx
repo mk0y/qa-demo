@@ -14,7 +14,6 @@ export function ChatView() {
   ) as string
   const [ask, { data: answer }] = useAskQMutation()
   const [messages, setMessages] = useState<string[]>([])
-  console.log({ answer })
   useEffect(() => {
     if (answer && answer.done) {
       setMessages(R.append(answer.done, messages))

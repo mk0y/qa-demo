@@ -1,12 +1,10 @@
-import DirListItem from '@/components/file-list/dir-list-item'
-import DirNameBack from '@/components/file-list/dir-name-back'
+import DirList from '@/components/file-list/dir-list'
+import FileList from '@/components/file-list/file-list'
 import NewDir from '@/components/file-list/new-dir'
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { useGetDocsQuery, useUploadDocsMutation } from '@/store/api'
-import { fetchDirs } from '@/store/docsReducer'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { RootState } from '@/store/store'
+import { setLocalDirs } from '@/store/docsReducer'
+import { useAppDispatch } from '@/store/hooks'
 import { useUser } from '@clerk/clerk-react'
 import { Redo, Undo } from 'lucide-react'
 import * as R from 'ramda'
@@ -14,13 +12,11 @@ import { SVGProps, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import nodocs from '/src/assets/nodocstr.webp'
 
-const FileList = ({ isDir }: { isDir?: boolean }) => {
+const FileListPage = ({ isDir }: { isDir?: boolean }) => {
   const { user } = useUser()
-  const params = useParams() as { dir: string }
   const dispatch = useAppDispatch()
-  useEffect(() => {
-    dispatch(fetchDirs(params.dir))
-  }, [params.dir])
+  const params = useParams() as { '*': string }
+  console.log({ params })
   const orgSlug = R.path(
     ['organizationMemberships', 0, 'organization', 'slug'],
     user
@@ -31,7 +27,7 @@ const FileList = ({ isDir }: { isDir?: boolean }) => {
     isLoading,
     isFetching
   } = useGetDocsQuery(
-    { container: orgSlug, dir: params['dir'] },
+    { container: orgSlug, dir: params['*'] },
     {
       skip: !!!orgSlug,
       // refetchOnFocus: true,
@@ -39,6 +35,11 @@ const FileList = ({ isDir }: { isDir?: boolean }) => {
       refetchOnMountOrArgChange: true
     }
   )
+  useEffect(() => {
+    if (R.is(Object, docs) && docs.dirs) {
+      dispatch(setLocalDirs(docs.dirs))
+    }
+  }, [R.isEmpty(docs)])
   const [, { isLoading: submitLoading, isSuccess: isSubmitSuccess }] =
     useUploadDocsMutation({ fixedCacheKey: 'uploaddocs' })
   useEffect(() => {
@@ -46,19 +47,11 @@ const FileList = ({ isDir }: { isDir?: boolean }) => {
       refetch()
     }
   }, [isSubmitSuccess])
-  const dirs = useAppSelector((state: RootState) => state.docsReducer.dirs)
   return (
     <div className="file-list-wrap h-full">
       <div className="flex mb-5 justify-between">
         <div className="flex items-end">
-          {isDir && (
-            <div>
-              <DirNameBack />
-            </div>
-          )}
-          <div className={isDir ? 'ml-8' : ''}>
-            <NewDir />
-          </div>
+          <NewDir />
         </div>
         <div className="flex">
           <Button variant="ghost" size="sm" title="Undo" disabled>
@@ -72,45 +65,14 @@ const FileList = ({ isDir }: { isDir?: boolean }) => {
         </div>
       </div>
       {submitLoading && <LoadingItem />}
-      {!R.isEmpty(dirs) ? (
-        <div>
-          {R.keys(dirs).map((dirSlug, i) => {
-            return (
-              <DirListItem key={i} dirName={dirs[dirSlug]} dirSlug={dirSlug} />
-            )
-          })}
-        </div>
-      ) : null}
+      <DirList />
+      {/* {R.pathOr(null, ['dirs'], docs)
+        ? R.keys(R.pathOr({}, ['dirs'], docs)).map((dirSlug, i) => {
+            return <DirListItem key={i} dirName="" dirSlug={dirSlug} />
+          })
+        : null} */}
       {!R.isEmpty(docs) ? (
-        <div>
-          <ScrollArea className="h-[720px]">
-            {R.keys(docs).map((docKey, i) => {
-              return (
-                <div
-                  className="shadow-md border rounded-md p-4 first:mt-0 mt-4"
-                  key={i}
-                >
-                  <div className="flex justify-between">
-                    <h2 className="font-semibold text-left">
-                      {R.path([docKey, 'blobname'], docs)}
-                    </h2>
-                    <div>
-                      {new Date(
-                        R.path([docKey, 'lastModified'], docs)
-                      ).toDateString()}
-                    </div>
-                  </div>
-                  <p className="my-2 text-sm leading-none text-left text-slate-500">
-                    {`${R.take(200, R.path([docKey, 'pages', 0, 'content'], docs))}...`}
-                  </p>
-                  <p className="mt-1 text-sm leading-none text-left text-slate-500">
-                    {R.path([docKey, 'pages', 0, 'place'], docs)}
-                  </p>
-                </div>
-              )
-            })}
-          </ScrollArea>
-        </div>
+        <FileList docs={docs} />
       ) : !isLoading && !isFetching && !submitLoading && !isDir ? (
         <div className="flex items-center justify-center flex-col">
           <EmptyDocuments />
@@ -210,4 +172,4 @@ const LoadingItem = () => {
   )
 }
 
-export default FileList
+export default FileListPage

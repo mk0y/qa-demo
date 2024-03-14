@@ -6,14 +6,17 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { slugify } from '@/lib/utils'
-import { addDirLF } from '@/store/docsReducer'
+import { addLocalDir } from '@/store/docsReducer'
 import { useAppDispatch } from '@/store/hooks'
 import { Folder } from 'lucide-react'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 const NewDir = () => {
   const dispatch = useAppDispatch()
   const [popupOpen, popupenSet] = useState(false)
+  const { '*': splats } = useParams()
+  const dirPath = splats ? `${splats}/` : ''
   return (
     <>
       <Popover open={popupOpen}>
@@ -28,9 +31,9 @@ const NewDir = () => {
             onKeyDown={(e) => {
               if (e.key == 'Enter') {
                 const { value } = e.currentTarget
-                console.log({ value })
-                console.log('onKeyDown', { [slugify(value)]: value })
-                dispatch(addDirLF({ [slugify(value)]: value }))
+                dispatch(
+                  addLocalDir({ [`${dirPath}${slugify(value)}`]: value })
+                )
                 popupenSet(false)
               }
             }}

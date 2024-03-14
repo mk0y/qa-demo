@@ -1,25 +1,27 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-type Docs = {
-  docs: {
-    [key: string]: {
-      pages: [{ pageNumber: number; content: string }]
-      lastModified: Date
-      blobname: string
+type Docs =
+  | {
+      [key: string]: {
+        pages: [{ pageNumber: number; content: string }]
+        lastModified: Date
+        blobname: string
+      }
     }
-  }
-}
+  | { dirs: Record<string, string> }
 
 export const docsApi = createApi({
   reducerPath: 'docsApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}` }),
   endpoints: (builder) => ({
-    getDocs: builder.query<Docs, { container: string, dir: string }>({
+    getDocs: builder.query<Docs, { container: string; dir: string }>({
       query: ({ container, dir }) => {
         const params = new URLSearchParams()
-        params.append("container", container)
+        params.append('container', container)
         if (dir) params.append('dir', dir)
-        return `get-docs?${params.toString()}`
+        const ret = `get-docs?${params.toString()}`
+        console.log({ ret })
+        return ret
       }
     }),
     uploadDocs: builder.mutation<void, FormData>({

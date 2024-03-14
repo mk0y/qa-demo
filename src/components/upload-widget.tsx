@@ -12,9 +12,12 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { useUploadDocsMutation } from '@/store/api'
+import { useAppSelector } from '@/store/hooks'
+import { RootState } from '@/store/store'
 import { useUser } from '@clerk/clerk-react'
 import * as R from 'ramda'
 import { useRef } from 'react'
+import { useParams } from 'react-router-dom'
 const UploadWidget = () => {
   const { user } = useUser()
   const uploadRef = useRef<HTMLInputElement>(null)
@@ -23,6 +26,10 @@ const UploadWidget = () => {
     user
   ) as string
   const [submitUpload] = useUploadDocsMutation({ fixedCacheKey: 'uploaddocs' })
+  const localDirs = useAppSelector(
+    (state: RootState) => state.docsReducer.localDirs
+  ) as Record<string, string>
+  const params = useParams()
   return (
     <Card>
       <CardHeader className="pb-4">
@@ -76,10 +83,15 @@ const UploadWidget = () => {
             const files: FileList | never[] = e.currentTarget.files || []
             const formData = new FormData()
             formData.append('container', orgSlug)
-            console.log('change')
+            const {'*': splats} = params
+            if (!R.isNil(splats)) {
+              formData.append('dirpath', splats)
+              formData.append('dirmeta', JSON.stringify(localDirs))
+            }
             for (let file of files) {
               formData.append('docs', file)
             }
+            console.log(formData)
             submitUpload(formData)
           }}
         />

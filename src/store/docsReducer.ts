@@ -4,17 +4,27 @@ import * as R from 'ramda'
 
 export interface DocsState {
   files: object[]
-  dirs: object
+  dirs: Record<string, {}>
+  localDirs: Record<string, string>
 }
 
 const initialState: DocsState = {
   files: [],
-  dirs: {}
+  dirs: {},
+  localDirs: {}
 }
 
-export const fetchDirs = createAsyncThunk(
+export const setLocalDirs = createAsyncThunk(
+  'dirs/setLocal',
+  async (dirmap: object) => {
+    await localforage.setItem('local_dirs', { ...dirmap })
+    return { ...dirmap }
+  }
+)
+
+export const fetchLocalDirs = createAsyncThunk(
   'dirs/fetchLocal',
-  async (dir: string) => {
+  async (dir?: string) => {
     const dirs = await localforage.getItem('local_dirs')
     if (!dirs) return {}
     if (!dir) return { ...dirs }
@@ -22,16 +32,19 @@ export const fetchDirs = createAsyncThunk(
   }
 )
 
-export const addDirLF = createAsyncThunk(
+export const addLocalDir = createAsyncThunk(
   'dirs/addLocal',
   async (dirObj: object) => {
     let dirs = (await localforage.getItem('local_dirs')) as object
     await localforage.setItem('local_dirs', R.mergeAll([dirObj, dirs]))
     dirs = (await localforage.getItem('local_dirs')) as object
-    console.log('dirs/getLocal', { dirs })
     return { ...dirs }
   }
 )
+
+export const clearLocalDirs = createAsyncThunk('dirs/clearLocal', async () => {
+  await localforage.removeItem('local_dirs')
+})
 
 export const docsSlice = createSlice({
   name: 'docs',
@@ -42,12 +55,17 @@ export const docsSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchDirs.fulfilled, (state, action) => {
-      state.dirs = action.payload || {}
+    builder.addCase(fetchLocalDirs.fulfilled, (state, action) => {
+      state.localDirs = action.payload || {}
     }),
-      builder.addCase(addDirLF.fulfilled, (state, action) => {
-        console.log({ action })
-        state.dirs = action.payload
+      builder.addCase(addLocalDir.fulfilled, (state, action) => {
+        state.localDirs = R.mergeAll([{ ...state.localDirs }, action.payload])
+      }),
+      builder.addCase(clearLocalDirs.fulfilled, (state) => {
+        state.localDirs = {}
+      }),
+      builder.addCase(setLocalDirs.fulfilled, (state, action) => {
+        state.localDirs = action.payload
       })
   }
 })

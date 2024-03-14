@@ -30,7 +30,7 @@ const router = createBrowserRouter([
             element: <DocsList />
           },
           {
-            path: '/docs/:dir',
+            path: '/docs/*',
             element: <DocsList isDir />
           },
           {
