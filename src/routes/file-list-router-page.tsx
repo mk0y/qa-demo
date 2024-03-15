@@ -16,7 +16,6 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
   const { user } = useUser()
   const dispatch = useAppDispatch()
   const params = useParams() as { '*': string }
-  console.log({ params })
   const orgSlug = R.path(
     ['organizationMemberships', 0, 'organization', 'slug'],
     user

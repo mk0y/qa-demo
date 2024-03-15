@@ -20,7 +20,6 @@ export const docsApi = createApi({
         params.append('container', container)
         if (dir) params.append('dir', dir)
         const ret = `get-docs?${params.toString()}`
-        console.log({ ret })
         return ret
       }
     }),
@@ -30,6 +29,18 @@ export const docsApi = createApi({
           url: '/',
           method: 'POST',
           body
+        }
+      }
+    }),
+    submitDirMeta: builder.mutation<
+      void,
+      { container: string; dirmeta: string }
+    >({
+      query: ({ container, dirmeta }) => {
+        return {
+          url: '/set-dirs',
+          method: 'POST',
+          body: { container, dirmeta }
         }
       }
     }),
@@ -69,5 +80,6 @@ export const {
   useUploadDocsMutation,
   useAskQMutation,
   useCreatePcIndexMutation,
-  useLazyGetPcStatusQuery
+  useLazyGetPcStatusQuery,
+  useSubmitDirMetaMutation
 } = docsApi

@@ -3,7 +3,6 @@ import * as R from 'ramda'
 import FileListItem from './file-list-item'
 
 const FileList = ({ docs }: { docs: {} }) => {
-  console.log({ docs22: docs })
   return (
     <div>
       <ScrollArea className="h-[720px]">

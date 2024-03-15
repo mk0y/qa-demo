@@ -22,7 +22,12 @@ const DirList = () => {
   return !R.isEmpty(localDirs) ? (
     <div>
       {splats && (
-        <DirListItem isParent key={1234} dirName={localDirs[splats]} dirSlug={splats} />
+        <DirListItem
+          isParent
+          key={1234}
+          dirName={localDirs[splats]}
+          dirSlug={splats}
+        />
       )}
       {R.keys(localDirs)
         .filter((ldkey) => {
@@ -32,6 +37,11 @@ const DirList = () => {
             const { '*': splats } = params
             return R.startsWith(`${splats}/`, ldkey)
           }
+        })
+        .sort((a, b) => {
+          if (a < b) return -1
+          if (a > b) return 1
+          return 0
         })
         .map((dirSlug, i) => {
           return (
