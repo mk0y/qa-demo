@@ -31,7 +31,7 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
       skip: !!!orgSlug,
       // refetchOnFocus: true,
       refetchOnReconnect: true,
-      refetchOnMountOrArgChange: true
+      refetchOnMountOrArgChange: true,
     }
   )
   useEffect(() => {
@@ -63,8 +63,8 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
           </Button>
         </div>
       </div>
-      {submitLoading && <LoadingItem />}
       <DirList />
+      {submitLoading && <LoadingItem />}
       {/* {R.pathOr(null, ['dirs'], docs)
         ? R.keys(R.pathOr({}, ['dirs'], docs)).map((dirSlug, i) => {
             return <DirListItem key={i} dirName="" dirSlug={dirSlug} />
