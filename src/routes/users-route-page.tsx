@@ -34,7 +34,7 @@ const Users = () => {
   const [emailsInputValue, setEmailsInputValue] = useState('')
   const [emailsValue, setEmailsValue] = useState<readonly Option[]>([])
   const { getToken, sessionId } = useAuth()
-  const [getUsers, getUsersResult] = useLazyGetRegisteredUsersQuery()
+  const [getUsers,] = useLazyGetRegisteredUsersQuery()
   const [submitInvites, { isLoading }] = useSendEmailsInvitationsMutation()
   const [getInvitations, getInvitationsResult] =
     useLazyGetEmailsInvitationsQuery()
