@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/popover'
 import { slugify } from '@/lib/utils'
 import { useSubmitDirMetaMutation } from '@/store/api'
-import { addLocalDir } from '@/store/docsReducer'
+import { addLocalDir, clearLocalDirs } from '@/store/docsReducer'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { RootState } from '@/store/store'
 import { useUser } from '@clerk/clerk-react'
@@ -31,14 +31,15 @@ const NewDir = () => {
     (state: RootState) => state.docsReducer.localDirs
   ) as Record<string, string>
   useEffect(() => {
-    if (!R.isEmpty(localDirs)) {
-      console.log('setting dirs')
+    if (!R.isEmpty(localDirs) && orgSlug) {
       submitDirMeta({
         container: orgSlug,
         dirmeta: JSON.stringify(localDirs)
       })
+    } else {
+      dispatch(clearLocalDirs())
     }
-  }, [R.isEmpty(localDirs), R.keys(localDirs).length])
+  }, [R.isEmpty(localDirs), R.keys(localDirs).length, orgSlug])
   return (
     <>
       <Popover open={popupOpen}>

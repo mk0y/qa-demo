@@ -28,10 +28,10 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
   } = useGetDocsQuery(
     { container: orgSlug, dir: params['*'] },
     {
-      skip: !!!orgSlug,
+      skip: !!!orgSlug
       // refetchOnFocus: true,
-      refetchOnReconnect: true,
-      refetchOnMountOrArgChange: true,
+      // refetchOnReconnect: true,
+      // refetchOnMountOrArgChange: true
     }
   )
   useEffect(() => {
@@ -48,29 +48,31 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
   }, [isSubmitSuccess])
   return (
     <div className="file-list-wrap h-full">
-      <div className="flex mb-5 justify-between">
-        <div className="flex items-end">
-          <NewDir />
+      {orgSlug && (
+        <div className="flex mb-5 justify-between">
+          <div className="flex items-end">
+            <NewDir />
+          </div>
+          <div className="flex">
+            <Button variant="ghost" size="sm" title="Undo" disabled>
+              <Undo size={20} strokeWidth={1.2} />
+              <span className="inline-block ml-1">Undo</span>
+            </Button>
+            <Button variant="ghost" size="sm" title="Redo" disabled>
+              <span className="inline-block mr-1">Redo</span>
+              <Redo size={20} strokeWidth={1.2} />
+            </Button>
+          </div>
         </div>
-        <div className="flex">
-          <Button variant="ghost" size="sm" title="Undo" disabled>
-            <Undo size={20} strokeWidth={1.2} />
-            <span className="inline-block ml-1">Undo</span>
-          </Button>
-          <Button variant="ghost" size="sm" title="Redo" disabled>
-            <span className="inline-block mr-1">Redo</span>
-            <Redo size={20} strokeWidth={1.2} />
-          </Button>
-        </div>
-      </div>
+      )}
       <DirList />
-      {submitLoading && <LoadingItem />}
+      {(submitLoading || isFetching || isLoading) && <LoadingItem />}
       {/* {R.pathOr(null, ['dirs'], docs)
         ? R.keys(R.pathOr({}, ['dirs'], docs)).map((dirSlug, i) => {
             return <DirListItem key={i} dirName="" dirSlug={dirSlug} />
           })
         : null} */}
-      {!R.isEmpty(docs) ? (
+      {!R.isEmpty(docs) && !isLoading && !isFetching ? (
         <FileList docs={docs} />
       ) : !isLoading && !isFetching && !submitLoading && !isDir ? (
         <div className="flex items-center justify-center flex-col">
@@ -94,9 +96,7 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
             </li>
           </ul>
         </div>
-      ) : (
-        !isDir && <LoadingItem />
-      )}
+      ) : null}
     </div>
   )
 }
@@ -147,7 +147,7 @@ const EmptyDocuments = () => <img src={nodocs} alt="no docs" className="w-64" />
 
 const LoadingItem = () => {
   return (
-    <div className="grid gap-2" key={123}>
+    <div className="grid gap-2 mb-4" key={123}>
       <div className="shadow rounded-md p-4 w-full">
         <div className="animate-pulse flex space-x-4">
           <div className="flex-1 space-y-6 py-1">

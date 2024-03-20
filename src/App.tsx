@@ -5,6 +5,7 @@ import {
   SignedIn,
   SignedOut
 } from '@clerk/clerk-react'
+import { CookiesProvider } from 'react-cookie'
 import { Provider } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router-dom'
 import './App.css'
@@ -15,18 +16,20 @@ function App() {
   const navigate = useNavigate()
   return (
     <ClerkProvider navigate={navigate} publishableKey={PUBLISHABLE_KEY}>
-      <Provider store={store}>
-        <div className="flex flex-1">
-          <SignedOut>
-            <div className="flex items-center justify-center h-screen">
-              <RedirectToSignIn />
-            </div>
-          </SignedOut>
-          <SignedIn>
-            <Outlet />
-          </SignedIn>
-        </div>
-      </Provider>
+      <CookiesProvider>
+        <Provider store={store}>
+          <div className="flex flex-1">
+            <SignedOut>
+              <div className="flex items-center justify-center h-screen">
+                <RedirectToSignIn />
+              </div>
+            </SignedOut>
+            <SignedIn>
+              <Outlet />
+            </SignedIn>
+          </div>
+        </Provider>
+      </CookiesProvider>
     </ClerkProvider>
   )
 }

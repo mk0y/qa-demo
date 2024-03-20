@@ -69,17 +69,58 @@ export const docsApi = createApi({
     }),
     getPcStatus: builder.query<{ state: string }, { pc: string }>({
       query: ({ pc }) => `pine?pc=${pc}`
+    }),
+    getRegisteredUsers: builder.query<
+      string,
+      { sid: string | null | undefined; stoken: string | null }
+    >({
+      query: ({ sid, stoken }) => {
+        return {
+          url: `get-users?sid=${sid}`,
+          method: 'GET',
+          headers: { Authorization: `Bearer: ${stoken}` }
+        }
+      }
+    }),
+    sendEmailsInvitations: builder.mutation<
+      { done: string },
+      { emails: string[]; st: string }
+    >({
+      query: (body: { emails: string[]; st: string }) => {
+        return {
+          url: '/invites',
+          method: 'POST',
+          body: { emails: body.emails },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer: ${body.st}`
+          }
+        }
+      }
+    }),
+    getEmailsInvitations: builder.query<any, { st: string }>({
+      query: (body: { st: string }) => {
+        return {
+          url: '/invites',
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer: ${body.st}`
+          }
+        }
+      }
     })
   })
 })
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
 export const {
   useGetDocsQuery,
   useUploadDocsMutation,
   useAskQMutation,
   useCreatePcIndexMutation,
   useLazyGetPcStatusQuery,
-  useSubmitDirMetaMutation
+  useSubmitDirMetaMutation,
+  useLazyGetRegisteredUsersQuery,
+  useSendEmailsInvitationsMutation,
+  useLazyGetEmailsInvitationsQuery
 } = docsApi

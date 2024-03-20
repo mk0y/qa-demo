@@ -1,5 +1,7 @@
 import ErrorPage from '@/error-page.tsx'
 import QueryPage from '@/routes/query-page.tsx'
+import { Theme } from '@radix-ui/themes'
+import '@radix-ui/themes/styles.css'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -70,6 +72,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Theme>
+      <RouterProvider router={router} />
+    </Theme>
   </React.StrictMode>
 )
