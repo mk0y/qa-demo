@@ -48,7 +48,7 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
   }, [isSubmitSuccess])
   return (
     <div className="file-list-wrap h-full">
-      {orgSlug && (
+      {orgSlug && !R.isEmpty(docs) && (
         <div className="flex mb-5 justify-between">
           <div className="flex items-end">
             <NewDir />
