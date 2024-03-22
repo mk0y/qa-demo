@@ -4,7 +4,7 @@ import gdrive from '../assets/google-drive-logo.png'
 
 const Integrations = () => {
   return (
-    <div className="flex flex-col justify-start items-start">
+    <div className="flex flex-col justify-start items-start p-8">
       <div className="text-3xl mb-4">Connect</div>
       <div className="w-[240px] shadow-md hover:shadow-xl transition-shadow cursor-pointer">
         <AspectRatio

@@ -2,7 +2,6 @@ import { useUploadDocsMutation } from '@/store/api'
 import { useAppSelector } from '@/store/hooks'
 import { RootState } from '@/store/store'
 import { useUser } from '@clerk/clerk-react'
-import { ScrollArea } from '@radix-ui/react-scroll-area'
 import * as R from 'ramda'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -52,23 +51,21 @@ const FileList = ({ docs }: { docs: {} }) => {
         setDragOver(false)
       }}
     >
-      <ScrollArea className="h-[720px]">
-        {R.keys(docs)
-          .filter((k) => k !== 'dirs')
-          .map((docKey, i) => {
-            return (
-              <FileListItem
-                key={i}
-                title={R.path([docKey, 'blobname'], docs)}
-                datetime={new Date(
-                  R.path([docKey, 'lastModified'], docs)
-                ).toDateString()}
-                excerpt={`${R.take(200, R.path([docKey, 'pages', 0, 'content'], docs))}...`}
-                place={R.path([docKey, 'pages', 0, 'place'], docs)}
-              />
-            )
-          })}
-      </ScrollArea>
+      {R.keys(docs)
+        .filter((k) => k !== 'dirs')
+        .map((docKey, i) => {
+          return (
+            <FileListItem
+              key={i}
+              title={R.path([docKey, 'blobname'], docs)}
+              datetime={new Date(
+                R.path([docKey, 'lastModified'], docs)
+              ).toDateString()}
+              excerpt={`${R.take(200, R.path([docKey, 'pages', 0, 'content'], docs))}...`}
+              place={R.path([docKey, 'pages', 0, 'place'], docs)}
+            />
+          )
+        })}
     </div>
   )
 }

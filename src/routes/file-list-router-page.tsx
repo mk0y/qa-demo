@@ -47,7 +47,7 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
     }
   }, [isSubmitSuccess])
   return (
-    <div className="file-list-wrap h-full">
+    <div className="file-list-wrap flex flex-col absolute w-full h-full p-8 overflow-auto">
       {orgSlug && !R.isEmpty(docs) && (
         <div className="flex mb-5 justify-between">
           <div className="flex items-end">
@@ -67,11 +67,6 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
       )}
       <DirList />
       {(submitLoading || isFetching || isLoading) && <LoadingItem />}
-      {/* {R.pathOr(null, ['dirs'], docs)
-        ? R.keys(R.pathOr({}, ['dirs'], docs)).map((dirSlug, i) => {
-            return <DirListItem key={i} dirName="" dirSlug={dirSlug} />
-          })
-        : null} */}
       {!R.isEmpty(docs) && !isLoading && !isFetching ? (
         <FileList docs={docs} />
       ) : !isLoading && !isFetching && !submitLoading && !isDir ? (

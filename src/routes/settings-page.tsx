@@ -29,7 +29,7 @@ const SettingsView = () => {
     if (orgSlug) triggerPc({ pc: orgSlug })
   }, [orgSlug])
   return (
-    <div className="text-left *:my-3 w-1/2">
+    <div className="text-left *:my-3 w-1/2 p-8">
       {!memberships || memberships.length < 1 ? (
         <CreateOrganization afterCreateOrganizationUrl="/settings" />
       ) : !isPcLoading && pcResult.data?.state == 'Ready' ? (

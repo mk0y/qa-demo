@@ -80,7 +80,7 @@ const Users = () => {
   )
   const hasInvalidOptions = emailsValue.some((v) => !v.isValid)
   return (
-    <div className="flex flex-col items-start">
+    <div className="flex flex-col items-start p-8">
       <div className="text-2xl mb-8">Users</div>
       <div className="relative w-[600px] text-left mb-8 flex justify-between">
         <div className="w-full">

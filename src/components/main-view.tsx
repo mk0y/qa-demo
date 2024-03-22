@@ -9,7 +9,7 @@ import UploadWidget from './upload-widget'
 
 const MainView = () => {
   return (
-    <div className="grid min-h-screen items-start gap-0 pb-0 lg:grid-cols-[280px_1fr] w-full">
+    <div className="grid min-h-screen h-screen items-start gap-0 pb-0 lg:grid-cols-[280px_1fr] w-full">
       <div className="hidden border-r bg-gray-100/40 dark:bg-gray-800/40 lg:block h-full">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-[60px] items-center border-b px-6">
@@ -34,7 +34,7 @@ const MainView = () => {
           </div>
         </div>
       </div>
-      <div className="scrollable flex flex-col h-full">
+      <div className="flex flex-col h-full">
         <header className="flex h-14 items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40 lg:h-[60px]">
           <a className="lg:hidden" href="#">
             <Package2Icon className="size-6" />
@@ -61,7 +61,10 @@ const MainView = () => {
             </SignedIn>
           </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6 max-w-5xl">
+        <main
+          // style={{ height: 'calc(100vh - 84px)' }}
+          className="flex flex-1 flex-col relative gap-4 md:gap-8 max-w-5xl"
+        >
           <Outlet />
         </main>
       </div>
