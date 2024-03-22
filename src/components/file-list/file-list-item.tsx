@@ -19,7 +19,7 @@ const FileListItem = ({
 }) => {
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="first:mt-0 mt-4 block cursor-context-menu">
+      <ContextMenuTrigger className="dnd-item first:mt-0 mt-4 block cursor-context-menu">
         <div className="shadow-md border p-4 hover:bg-neutral-100 transition">
           <div className="flex justify-between">
             <h2 className="font-semibold text-left">{title}</h2>
