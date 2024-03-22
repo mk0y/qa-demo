@@ -49,3 +49,14 @@
   padding: 0.5rem;
   @apply shadow-inner;
 }
+
+.dnd-item-2 .dnd-ico {
+  transition: all 0.25s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.dnd-item-2:hover .dnd-ico {
+  opacity: 1;
+  visibility: visible;
+}
