@@ -19,13 +19,18 @@ const DirList = () => {
   const localDirs = useAppSelector(
     (state: RootState) => state.docsReducer.localDirs
   ) as Record<string, string>
+  console.log(localDirs)
+  const upDirPath = splats
+    ? R.pipe(R.split('/'), R.init, R.join('/'))(splats)
+    : ''
+  console.log({ upDirPath })
   return !R.isEmpty(localDirs) ? (
     <div>
       {splats && (
         <DirListItem
           isParent
           key={1234}
-          dirName={localDirs[splats]}
+          dirName={`${localDirs[upDirPath] || '/'}`}
           dirSlug={splats}
         />
       )}
@@ -35,7 +40,11 @@ const DirList = () => {
             return R.split('/', ldkey).length == 1
           } else {
             const { '*': splats } = params
-            return R.startsWith(`${splats}/`, ldkey)
+            return (
+              R.startsWith(`${splats}/`, ldkey) &&
+              splats &&
+              splats.split('/').length == ldkey.split('/').length - 1
+            )
           }
         })
         .sort((a, b) => {

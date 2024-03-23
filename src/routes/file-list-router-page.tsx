@@ -3,7 +3,6 @@ import FileList from '@/components/file-list/file-list'
 import NewDir from '@/components/file-list/new-dir'
 import { Button } from '@/components/ui/button'
 import { useGetDocsQuery, useUploadDocsMutation } from '@/store/api'
-import { setLocalDirs } from '@/store/docsReducer'
 import { useAppDispatch } from '@/store/hooks'
 import { useUser } from '@clerk/clerk-react'
 import { Redo, Undo } from 'lucide-react'
@@ -11,6 +10,7 @@ import * as R from 'ramda'
 import { SVGProps, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import nodocs from '/src/assets/nodocstr.webp'
+import { setLocalDirs } from '@/store/docsReducer'
 
 const FileListPage = ({ isDir }: { isDir?: boolean }) => {
   const { user } = useUser()
@@ -53,7 +53,7 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
           <div className="flex items-end">
             <NewDir />
           </div>
-          <div className="flex">
+          {/* <div className="flex">
             <Button variant="ghost" size="sm" title="Undo" disabled>
               <Undo size={20} strokeWidth={1.2} />
               <span className="inline-block ml-1">Undo</span>
@@ -62,10 +62,10 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
               <span className="inline-block mr-1">Redo</span>
               <Redo size={20} strokeWidth={1.2} />
             </Button>
-          </div>
+          </div> */}
         </div>
       )}
-      <DirList />
+      {!isFetching && !isLoading && <DirList />}
       {(submitLoading || isFetching || isLoading) && <LoadingItem />}
       {!R.isEmpty(docs) && !isLoading && !isFetching ? (
         <FileList docs={docs} />

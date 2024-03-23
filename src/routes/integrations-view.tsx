@@ -207,8 +207,8 @@ function ConfluenceSVG() {
           x1="59.68"
           id="linear-gradient"
         >
-          <stop id="stop43" stop-color="#0052cc" offset=".18" />
-          <stop id="stop45" stop-color="#2684ff" offset="1" />
+          <stop id="stop43" stopColor="#0052cc" offset=".18" />
+          <stop id="stop45" stopColor="#2684ff" offset="1" />
         </linearGradient>
         <linearGradient
           xlinkHref="#linear-gradient"

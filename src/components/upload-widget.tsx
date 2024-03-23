@@ -84,9 +84,9 @@ const UploadWidget = () => {
             const formData = new FormData()
             formData.append('container', orgSlug)
             const { '*': splats } = params
-            formData.append('dirmeta', JSON.stringify(localDirs))
             if (!R.isNil(splats)) {
               formData.append('dirpath', splats)
+              formData.append('dirmeta', JSON.stringify(localDirs))
             }
             for (let file of files) {
               formData.append('docs', file)
