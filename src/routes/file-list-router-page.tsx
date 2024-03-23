@@ -1,16 +1,14 @@
 import DirList from '@/components/file-list/dir-list'
 import FileList from '@/components/file-list/file-list'
 import NewDir from '@/components/file-list/new-dir'
-import { Button } from '@/components/ui/button'
 import { useGetDocsQuery, useUploadDocsMutation } from '@/store/api'
+import { setLocalDirs } from '@/store/docsReducer'
 import { useAppDispatch } from '@/store/hooks'
 import { useUser } from '@clerk/clerk-react'
-import { Redo, Undo } from 'lucide-react'
 import * as R from 'ramda'
 import { SVGProps, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import nodocs from '/src/assets/nodocstr.webp'
-import { setLocalDirs } from '@/store/docsReducer'
 
 const FileListPage = ({ isDir }: { isDir?: boolean }) => {
   const { user } = useUser()
