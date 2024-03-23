@@ -31,7 +31,7 @@ const DirListItem = ({
     <ContextMenu>
       <ContextMenuTrigger className="dnd-item first:mt-0 mt-4 block cursor-default">
         <div
-          className={`${isParent ? 'shadow-sm' : 'border shadow-md'} relative dnd-item-2 cursor-default hover:bg-neutral-100 rounded-md p-4 mb-4`}
+          className={`${isParent ? 'shadow-sm' : 'border shadow-md'} relative bg-white dnd-item-2 cursor-default hover:bg-neutral-100 rounded-md p-4 mb-4`}
         >
           <Link
             to={

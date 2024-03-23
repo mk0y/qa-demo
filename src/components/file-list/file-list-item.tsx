@@ -20,7 +20,7 @@ const FileListItem = ({
   return (
     <ContextMenu>
       <ContextMenuTrigger className="dnd-item first:mt-0 mt-4 block cursor-default">
-        <div className="dnd-item-2 relative shadow-md border p-4 hover:bg-neutral-100 transition">
+        <div className="dnd-item-2 relative bg-white rounded-md shadow-md border p-4 hover:bg-neutral-100 transition">
           <div className="flex justify-between">
             <h2 className="font-semibold text-left">{title}</h2>
             <div>{datetime}</div>

@@ -3,10 +3,11 @@ import FileList from '@/components/file-list/file-list'
 import NewDir from '@/components/file-list/new-dir'
 import { useGetDocsQuery, useUploadDocsMutation } from '@/store/api'
 import { setLocalDirs } from '@/store/docsReducer'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { RootState } from '@/store/store'
 import { useUser } from '@clerk/clerk-react'
 import * as R from 'ramda'
-import { SVGProps, useEffect } from 'react'
+import { SVGProps, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import nodocs from '/src/assets/nodocstr.webp'
 
@@ -37,15 +38,51 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
       dispatch(setLocalDirs(docs.dirs))
     }
   }, [R.isEmpty(docs)])
-  const [, { isLoading: submitLoading, isSuccess: isSubmitSuccess }] =
-    useUploadDocsMutation({ fixedCacheKey: 'uploaddocs' })
+  const [
+    submitUpload,
+    { isLoading: submitLoading, isSuccess: isSubmitSuccess }
+  ] = useUploadDocsMutation({ fixedCacheKey: 'uploaddocs' })
   useEffect(() => {
     if (isSubmitSuccess) {
       refetch()
     }
   }, [isSubmitSuccess])
+  const [dragOver, setDragOver] = useState(false)
+  const localDirs = useAppSelector(
+    (state: RootState) => state.docsReducer.localDirs
+  ) as Record<string, string>
   return (
-    <div className="file-list-wrap flex flex-col absolute w-full h-full p-8 overflow-auto">
+    <div
+      className={`file-list-wrap ${dragOver ? 'bg-zinc-200' : ''} flex flex-col absolute w-full h-full p-8 overflow-auto`}
+      onDrop={(e) => {
+        e.preventDefault()
+        setDragOver(false)
+        const files = e.dataTransfer.files
+        const formData = new FormData()
+        formData.append('container', orgSlug)
+        const { '*': splats } = params
+        if (!R.isNil(splats)) {
+          formData.append('dirpath', splats)
+          formData.append('dirmeta', JSON.stringify(localDirs))
+        }
+        for (let file of files) {
+          formData.append('docs', file)
+        }
+        submitUpload(formData)
+      }}
+      onDragEnter={(e) => {
+        e.preventDefault()
+        setDragOver(true)
+      }}
+      onDragOver={(e) => {
+        e.preventDefault()
+        setDragOver(true)
+      }}
+      onDragLeave={(e) => {
+        e.preventDefault()
+        setDragOver(false)
+      }}
+    >
       {orgSlug && !R.isEmpty(docs) && (
         <div className="flex mb-5 justify-between">
           <div className="flex items-end">
@@ -67,7 +104,11 @@ const FileListPage = ({ isDir }: { isDir?: boolean }) => {
       {(submitLoading || isFetching || isLoading) && <LoadingItem />}
       {!R.isEmpty(docs) && !isLoading && !isFetching ? (
         <FileList docs={docs} />
-      ) : !isLoading && !isFetching && !submitLoading && !isDir ? (
+      ) : !isLoading &&
+        !isFetching &&
+        !submitLoading &&
+        !isDir &&
+        R.isEmpty(docs.dirs) ? (
         <div className="flex items-center justify-center flex-col">
           <EmptyDocuments />
           <p>No documents yet.</p>

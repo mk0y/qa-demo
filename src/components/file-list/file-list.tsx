@@ -1,56 +1,9 @@
-import { useUploadDocsMutation } from '@/store/api'
-import { useAppSelector } from '@/store/hooks'
-import { RootState } from '@/store/store'
-import { useUser } from '@clerk/clerk-react'
 import * as R from 'ramda'
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import FileListItem from './file-list-item'
 
 const FileList = ({ docs }: { docs: {} }) => {
-  const [dragOver, setDragOver] = useState(false)
-  const { user } = useUser()
-  const params = useParams()
-  const localDirs = useAppSelector(
-    (state: RootState) => state.docsReducer.localDirs
-  ) as Record<string, string>
-  const [submitUpload] = useUploadDocsMutation({ fixedCacheKey: 'uploaddocs' })
-  const orgSlug = R.path(
-    ['organizationMemberships', 0, 'organization', 'slug'],
-    user
-  ) as string
   return (
-    <div
-      className={`dnd ${dragOver ? 'drop' : ''}`}
-      onDrop={(e) => {
-        e.preventDefault()
-        setDragOver(false)
-        const files = e.dataTransfer.files
-        const formData = new FormData()
-        formData.append('container', orgSlug)
-        const { '*': splats } = params
-        if (!R.isNil(splats)) {
-          formData.append('dirpath', splats)
-          formData.append('dirmeta', JSON.stringify(localDirs))
-        }
-        for (let file of files) {
-          formData.append('docs', file)
-        }
-        submitUpload(formData)
-      }}
-      onDragEnter={(e) => {
-        e.preventDefault()
-        setDragOver(true)
-      }}
-      onDragOver={(e) => {
-        e.preventDefault()
-        setDragOver(true)
-      }}
-      onDragLeave={(e) => {
-        e.preventDefault()
-        setDragOver(false)
-      }}
-    >
+    <div>
       {R.keys(docs)
         .filter((k) => k !== 'dirs')
         .map((docKey, i) => {
